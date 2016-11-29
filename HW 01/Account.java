@@ -134,3 +134,43 @@ class CheckingAccount extends Account implements FullFunctionalAccount {
         return(accountBalance);                            
     }  	
 }           
+
+/*
+ *  Derived Class: SavingAccount
+ *
+ *  Description:
+ *      Monthly interest; fee of $1 for every transaction, except
+ *      the first three per month are free; no minimum balance.
+ */
+
+class SavingAccount extends Account implements FullFunctionalAccount {
+    
+}
+
+/*
+ *  Derived Class: CDAccount
+ *
+ *  Description:
+ *      Monthly interest; fixed amount and duration (e.g., you can open
+ *      1 12-month CD for $5000; for the next 12 months you can't deposit
+ *      anything and withdrawals cost a  $250 fee); at the end of the 
+ *      duration the interest payments stop and you can withdraw w/o fee.
+ */
+
+class CDAccount extends Account implements FullFunctionalAccount {
+    
+}
+
+/*
+ *  Derived Class: LoanAccount
+ *
+ *  Description:
+ *      Like a saving account, but the balance is "negative" (you owe
+ *      the bank money, so a deposit will reduce the amount of the loan);
+ *      you can't withdraw (i.e., loan more money) but of course you can 
+ *      deposit (i.e., pay off part of the loan).
+ */
+
+class LoanAccount extends Account implements FullFunctionalAccount {
+    
+}
