@@ -58,10 +58,12 @@ public abstract class Account {
     public double balance() {
         return(accountBalance);
     }
+
+    abstract double deposit(double amount, Date depositDate) throws BankingException;
     
-    public double deposit(double amount) throws BankingException{
-        accountBalance += amount;
-        return(accountBalance);
+    public double deposit(double amount) throws BankingException {
+        Date depositDate = new Date();
+        return(deposit(amount, depositDate));
     } 
     
     abstract double withdraw(double amount, Date withdrawDate) throws BankingException;
@@ -104,6 +106,11 @@ class CheckingAccount extends Account implements FullFunctionalAccount {
         openDate = firstDate;
         lastInterestDate = openDate;	
     }	
+
+    public double deposit(double amount, Date depositDate) throws BankingException {
+        accountBalance += amount;
+        return accountBalance;
+    }
     
     public double withdraw(double amount, Date withdrawDate) throws BankingException {
     // minimum balance is 1000, raise exception if violated
