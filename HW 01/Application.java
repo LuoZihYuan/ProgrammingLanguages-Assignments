@@ -42,23 +42,25 @@ public static void main( String args []) {
     }
     
     /* put your own tests here ....... */
-	/* if your implementaion is correct, you can do the following with polymorphic array accountList
-		public Account[] accountList;
-		
-		accountList = new Account[4];
-		
-		// buid 4 different accounts in the same array
-		accountList[0] = new CheckingAccount("John Smith", 1500.0);
-		accountList[1] = new SavingAccount("William Hurt", 1200.0);
-		accountList[2] = new CDAccount("Woody Allison", 1000.0);
-		accountList[3] = new LoanAccount("Judi Foster", -1500.0);
-		
-		// compute interest for all accounts
-		for (int count = 0; count < accountList.length; count++) {
-			double newBalance = accountList[count].computeInterest();
-			System.out.println ("Account <" + a.name() + "> now has $" + newBalance + " balance\n");
-		}
-	*/
+	Account[] accountList;
+	
+	accountList = new Account[4];
+	
+	// buid 4 different accounts in the same array
+	accountList[0] = new CheckingAccount("John Smith", 1500.0);
+	accountList[1] = new SavingAccount("William Hurt", 1200.0);
+	accountList[2] = new CDAccount("Woody Allison", 1000.0);
+	accountList[3] = new LoanAccount("Judi Foster", -1500.0);
+	
+	// compute interest for all accounts
+	for (int count = 0; count < accountList.length; count++) {
+        try {
+            double newBalance = accountList[count].computeInterest();
+            System.out.println ("Account <" + a.name() + "> now has $" + newBalance + " balance\n");
+        } catch (Exception e) {
+            stdExceptionPrinting(e, a.balance());
+        }
+	}
 }
 
 static void stdExceptionPrinting(Exception e, double balance) {

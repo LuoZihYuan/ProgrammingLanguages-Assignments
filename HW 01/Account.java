@@ -125,7 +125,7 @@ class CheckingAccount extends Account implements FullFunctionalAccount {
     
     public double computeInterest(Date interestDate) throws BankingException {
         if (interestDate.before(lastInterestDate)) {
-            throw new BankingException ("Invalid date to compute interest for account name" +
+            throw new BankingException ("Invalid date to compute interest for account name:" +
                                         accountName);                            	
         }
         
@@ -177,7 +177,7 @@ class SavingAccount extends Account implements FullFunctionalAccount {
 
     public double deposit(double amount, Date depositDate) throws BankingException {
         if (depositDate.before(lastTransactionDate)) {
-            throw new BankingException("Invalid date to deposit for account name" +
+            throw new BankingException("Invalid date to deposit for account name:" +
                                         accountName);
         } else if ((depositDate.getTime() - lastTransactionDate.getTime()) > 2592000000.0) {
             freeTransactions = 2;
@@ -197,7 +197,7 @@ class SavingAccount extends Account implements FullFunctionalAccount {
 
     public double withdraw(double amount, Date withdrawDate) throws BankingException {
         if (withdrawDate.before(lastTransactionDate)) {
-            throw new BankingException("Invalid date to withdraw for account name" +
+            throw new BankingException("Invalid date to withdraw for account name:" +
                                         accountName);
         } else if ((accountBalance - amount) < 0) {
             throw new BankingException("Underfraft from saving account name:" +
@@ -213,14 +213,14 @@ class SavingAccount extends Account implements FullFunctionalAccount {
         } else {
             accountBalance -= amount;
             accountBalance -= 1.0;
-            lastTransactionDate = depositDate;
+            lastTransactionDate = withdrawDate;
         }
         return(accountBalance);
     }
 
     public double computeInterest(Date interestDate) throws BankingException {
         if (interestDate.before(lastInterestDate)) {
-            throw new BankingException("Invalid date to compute interest for account name" +
+            throw new BankingException("Invalid date to compute interest for account name:" +
                                         accountName);
         }
 
@@ -251,32 +251,32 @@ class CDAccount extends Account implements FullFunctionalAccount {
     
     protected int accountDuration;
 
-    CDAccount(String s, double firstDeposit, int durationMonth) {
+    CDAccount(String s, double firstDeposit) {
         accountName = s;
         accountBalance = firstDeposit;
         accountInterestRate = 0.12;
         openDate = new Date();
         lastInterestDate = openDate;
-        accountDuration = durationMonth;
+        accountDuration = 12;
     }
 
-    CDAccount(String s, double firstDeposit, int durationMonth, Date firstDate) {
+    CDAccount(String s, double firstDeposit, Date firstDate) {
         accountName = s;
         accountBalance = firstDeposit;
         accountInterestRate = 0.12;
         openDate = firstDate;
         lastInterestDate = openDate;
-        accountDuration = durationMonth;
+        accountDuration = 12;
     }
 
     public double deposit(double amount, Date depositDate) throws BankingException {
-        throw new BankingException("Invalid to deposit from CDAccount for account name" +
+        throw new BankingException("Invalid to deposit from CDAccount for account name:" +
                                     accountName);
     }
 
     public double withdraw(double amount, Date withdrawDate) throws BankingException {
         if (withdrawDate.before(openDate)) {
-            throw new BankingException("Invalid date to withdraw for account name" +
+            throw new BankingException("Invalid date to withdraw for account name:" +
                                         accountName);
         }
 
@@ -296,7 +296,7 @@ class CDAccount extends Account implements FullFunctionalAccount {
 
     public double computeInterest(Date interestDate) throws BankingException {
         if (interestDate.before(lastInterestDate)) {
-            throw new BankingException("Invalid date to compute interest for account name" +
+            throw new BankingException("Invalid date to compute interest for account name:" +
                                         accountName);
         }
 
@@ -351,12 +351,12 @@ class LoanAccount extends Account implements FullFunctionalAccount {
     }
     
     public double withdraw(double amount, Date withdrawDate) throws BankingException {
-        throw new BankingException("Invalid to withdraw from LoanAccount for account name" +
+        throw new BankingException("Invalid to withdraw from LoanAccount for account name:" +
                                     accountName);
     }
     
     public double computeInterest(Date interestDate) throws BankingException {
-        throw new BankingException("Invalid to compute interest from LoanAccount for account name" +
+        throw new BankingException("Invalid to compute interest from LoanAccount for account name:" +
                                     accountName);
     }   
 }
