@@ -332,5 +332,31 @@ class CDAccount extends Account implements FullFunctionalAccount {
  */
 
 class LoanAccount extends Account implements FullFunctionalAccount {
+
+    LoanAccount(String s, double firstDeposit) {
+        accountName = s;
+        accountBalance = firstDeposit;
+        openDate = new Date();
+    }
     
+    LoanAccount(String s, double firstDeposit, Date firstDate) {
+        accountName = s;
+        accountBalance = firstDeposit;
+        openDate = firstDate;
+    }   
+
+    public double deposit(double amount, Date depositDate) throws BankingException {
+        accountBalance += amount;
+        return accountBalance;
+    }
+    
+    public double withdraw(double amount, Date withdrawDate) throws BankingException {
+        throw new BankingException("Invalid to withdraw from LoanAccount for account name" +
+                                    accountName);
+    }
+    
+    public double computeInterest(Date interestDate) throws BankingException {
+        throw new BankingException("Invalid to compute interest from LoanAccount for account name" +
+                                    accountName);
+    }   
 }
