@@ -123,7 +123,7 @@ class CheckingAccount extends Account implements FullFunctionalAccount {
         }                                        	
     }
     
-    public double computeInterest (Date interestDate) throws BankingException {
+    public double computeInterest(Date interestDate) throws BankingException {
         if (interestDate.before(lastInterestDate)) {
             throw new BankingException ("Invalid date to compute interest for account name" +
                                         accountName);                            	
@@ -151,7 +151,90 @@ class CheckingAccount extends Account implements FullFunctionalAccount {
  */
 
 class SavingAccount extends Account implements FullFunctionalAccount {
-    
+
+    protected Date lastTransactionDate;
+    protected int freeTransactions;
+
+    SavingAccount(String s, double firstDeposit) {
+        accountName = s;
+        accountBalance = firstDeposit;
+        accountInterestRate = 0.12;
+        openDate = new Date();
+        lastInterestDate = openDate;
+        lastTransactionDate = openDate;
+        freeTransactions = 3;
+    }
+
+    SavingAccount(String s, double firstDeposit, Date firstDate) {
+        accountName = s;
+        accountBalance = firstDeposit;
+        accountInterestRate = 0.12;
+        openDate = firstDate;
+        lastInterestDate = openDate;
+        lastTransactionDate = openDate;
+        freeTransactions = 3;
+    }
+
+    public double deposit(double amount, Date depositDate) throws BankingException {
+        if (depositDate.before(lastTransactionDate)) {
+            throw new BankingException("Invalid date to deposit for account name" +
+                                        accountName);
+        } else if ((depositDate.getTime() - lastTransactionDate.getTime()) > 2592000000.0) {
+            freeTransactions = 2;
+            accountBalance += amount;
+            lastTransactionDate = depositDate;
+        } else if (freeTransactions > 0) {
+            freeTransactions -= 1;
+            accountBalance += amount;
+            lastTransactionDate = depositDate;
+        } else {
+            accountBalance += amount;
+            accountBalance -= 1.0;
+            lastTransactionDate = depositDate;
+        }
+        return(accountBalance);
+    }
+
+    public double withdraw(double amount, Date withdrawDate) throws BankingException {
+        if (withdrawDate.before(lastTransactionDate)) {
+            throw new BankingException("Invalid date to deposit for account name" +
+                                        accountName);
+        } else if ((accountBalance - amount) < 0) {
+            throw new BankingException("Underfraft from checking account name:" +
+                                        accountName);
+        } else if ((withdrawDate.getTime() - lastTransactionDate.getTime()) > 2592000000.0) {
+            freeTransactions = 2;
+            accountBalance -= amount;
+            lastTransactionDate = withdrawDate;
+        } else if (freeTransactions > 0) {
+            freeTransactions -= 1;
+            accountBalance -= amount;
+            lastTransactionDate = withdrawDate;
+        } else {
+            accountBalance -= amount;
+            accountBalance -= 1.0;
+            lastTransactionDate = depositDate;
+        }
+        return(accountBalance);
+    }
+
+    public double computeInterest(Date interestDate) throws BankingException {
+        if (interestDate.before(lastTransactionDate)) {
+            throw new BankingException("Invalid date to compute interest for account name" +
+                                        accountName);
+        }
+
+        int numberOfMonths = (int) ((interestDate.getTime()
+                                     - lastInterestDate.getTime())
+                                     / 2592000000.0);
+        System.out.println("Number of months since last interest is " + numberOfMonths);
+        double interestEarned = (double) numberOfMonths / 12.0 *
+                                    accountInterestRate * accountBalance;
+        System.out.println("Interest earned is " + interestEarned);
+        lastInterestDate = interestDate;
+        accountBalance += interestEarned;
+        return(accountBalance);
+    }
 }
 
 /*
