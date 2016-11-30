@@ -197,10 +197,10 @@ class SavingAccount extends Account implements FullFunctionalAccount {
 
     public double withdraw(double amount, Date withdrawDate) throws BankingException {
         if (withdrawDate.before(lastTransactionDate)) {
-            throw new BankingException("Invalid date to deposit for account name" +
+            throw new BankingException("Invalid date to withdraw for account name" +
                                         accountName);
         } else if ((accountBalance - amount) < 0) {
-            throw new BankingException("Underfraft from checking account name:" +
+            throw new BankingException("Underfraft from saving account name:" +
                                         accountName);
         } else if ((withdrawDate.getTime() - lastTransactionDate.getTime()) > 2592000000.0) {
             freeTransactions = 2;
@@ -219,7 +219,7 @@ class SavingAccount extends Account implements FullFunctionalAccount {
     }
 
     public double computeInterest(Date interestDate) throws BankingException {
-        if (interestDate.before(lastTransactionDate)) {
+        if (interestDate.before(lastInterestDate)) {
             throw new BankingException("Invalid date to compute interest for account name" +
                                         accountName);
         }
@@ -249,6 +249,76 @@ class SavingAccount extends Account implements FullFunctionalAccount {
 
 class CDAccount extends Account implements FullFunctionalAccount {
     
+    protected int accountDuration;
+
+    CDAccount(String s, double firstDeposit, int durationMonth) {
+        accountName = s;
+        accountBalance = firstDeposit;
+        accountInterestRate = 0.12;
+        openDate = new Date();
+        lastInterestDate = openDate;
+        accountDuration = durationMonth;
+    }
+
+    CDAccount(String s, double firstDeposit, int durationMonth, Date firstDate) {
+        accountName = s;
+        accountBalance = firstDeposit;
+        accountInterestRate = 0.12;
+        openDate = firstDate;
+        lastInterestDate = openDate;
+        accountDuration = durationMonth;
+    }
+
+    public double deposit(double amount, Date depositDate) throws BankingException {
+        throw new BankingException("Invalid to deposit from CDAccount for account name" +
+                                    accountName);
+    }
+
+    public double withdraw(double amount, Date withdrawDate) throws BankingException {
+        if (withdrawDate.before(openDate)) {
+            throw new BankingException("Invalid date to withdraw for account name" +
+                                        accountName);
+        }
+
+        int numberOfMonths = (int) ((withdrawDate.getTime()
+                                     - openDate.getTime())
+                                     / 2592000000.0);
+        double extraFee = (numberOfMonths >= accountDuration) 
+                            ? 0.0: 250.0;
+        if ((accountBalance - amount - extraFee) < 0) {
+            throw new BankingException("Underfraft from CD account name:" +
+                                        accountName);
+        } else {
+            accountBalance -= (amount + extraFee);
+            return(accountBalance);
+        }
+    }
+
+    public double computeInterest(Date interestDate) throws BankingException {
+        if (interestDate.before(lastInterestDate)) {
+            throw new BankingException("Invalid date to compute interest for account name" +
+                                        accountName);
+        }
+
+        int numberOfMonths = (int) ((interestDate.getTime()
+                                     - lastInterestDate.getTime())
+                                     / 2592000000.0);
+        System.out.println("Number of months since last interest is " + numberOfMonths);
+        int pastMonths = (int) ((lastInterestDate.getTime()
+                                 - openDate.getTime())
+                                 / 2592000000.0);
+        if (numberOfMonths + pastMonths > accountDuration) {
+            numberOfMonths = (accountDuration - pastMonths);
+            numberOfMonths = (numberOfMonths < 0)? 0: numberOfMonths;
+        }
+        double interestEarned = (double) numberOfMonths / 12.0 *
+                                    accountInterestRate * accountBalance;
+        System.out.println("Interest earned is " + interestEarned);
+        lastInterestDate = interestDate;
+        accountBalance += interestEarned;
+        return(accountBalance);
+    }
+
 }
 
 /*
