@@ -152,6 +152,7 @@ class CheckingAccount extends Account implements FullFunctionalAccount {
 
 class SavingAccount extends Account implements FullFunctionalAccount {
 
+    // protected variables to keep track of free transactions per month of SavingAccount
     protected Date lastTransactionDate;
     protected int freeTransactions;
 
@@ -176,6 +177,7 @@ class SavingAccount extends Account implements FullFunctionalAccount {
     }
 
     public double deposit(double amount, Date depositDate) throws BankingException {
+        // every transaction cost a $1 fee, except the first three per month are free
         if (depositDate.before(lastTransactionDate)) {
             throw new BankingException("Invalid date to deposit for account name:" +
                                         accountName);
@@ -196,6 +198,7 @@ class SavingAccount extends Account implements FullFunctionalAccount {
     }
 
     public double withdraw(double amount, Date withdrawDate) throws BankingException {
+        // every transaction cost a $1 fee, except the first three per month are free
         if (withdrawDate.before(lastTransactionDate)) {
             throw new BankingException("Invalid date to withdraw for account name:" +
                                         accountName);
@@ -219,6 +222,7 @@ class SavingAccount extends Account implements FullFunctionalAccount {
     }
 
     public double computeInterest(Date interestDate) throws BankingException {
+        // compute interest of SavingAccount monthly
         if (interestDate.before(lastInterestDate)) {
             throw new BankingException("Invalid date to compute interest for account name:" +
                                         accountName);
@@ -249,6 +253,7 @@ class SavingAccount extends Account implements FullFunctionalAccount {
 
 class CDAccount extends Account implements FullFunctionalAccount {
     
+    // protected variable to store fixed duration of CDAccount
     protected int accountDuration;
 
     CDAccount(String s, double firstDeposit) {
@@ -270,11 +275,13 @@ class CDAccount extends Account implements FullFunctionalAccount {
     }
 
     public double deposit(double amount, Date depositDate) throws BankingException {
+        // prohibit to deposit money into CDAccount after first deposit
         throw new BankingException("Invalid to deposit from CDAccount for account name:" +
                                     accountName);
     }
 
     public double withdraw(double amount, Date withdrawDate) throws BankingException {
+        // withdrawals within fixed duration cost a $250 fee
         if (withdrawDate.before(openDate)) {
             throw new BankingException("Invalid date to withdraw for account name:" +
                                         accountName);
@@ -295,6 +302,7 @@ class CDAccount extends Account implements FullFunctionalAccount {
     }
 
     public double computeInterest(Date interestDate) throws BankingException {
+        // compute interest of CDAccount monthly
         if (interestDate.before(lastInterestDate)) {
             throw new BankingException("Invalid date to compute interest for account name:" +
                                         accountName);
@@ -351,11 +359,13 @@ class LoanAccount extends Account implements FullFunctionalAccount {
     }
     
     public double withdraw(double amount, Date withdrawDate) throws BankingException {
+        // prohibit to withdraw money from LoanAccount
         throw new BankingException("Invalid to withdraw from LoanAccount for account name:" +
                                     accountName);
     }
     
     public double computeInterest(Date interestDate) throws BankingException {
+        // prohibit to compute interest from LoanAccount
         throw new BankingException("Invalid to compute interest from LoanAccount for account name:" +
                                     accountName);
     }   
