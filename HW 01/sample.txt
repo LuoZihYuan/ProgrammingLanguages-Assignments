@@ -1,0 +1,22 @@
+Output:
+Account <John Smith> now has $1400.0 balance
+
+EXCEPTION: Banking system throws a class BankingException with message: 
+	MESSAGE: Underfraft from checking account name:John Smith
+	Account balance remains $1500.0
+
+Number of days since last interest is 0
+Interest earned is 0.0
+Account <John Smith> now has $1500.0 balance
+
+Number of months since last interest is 0
+Interest earned is 0.0
+Account <John Smith> now has $1200.0 balance
+
+Number of months since last interest is 0
+Interest earned is 0.0
+Account <John Smith> now has $1000.0 balance
+
+EXCEPTION: Banking system throws a class BankingException with message: 
+	MESSAGE: Invalid to compute interest from LoanAccount for account name:Judi Foster
+	Account balance remains $1500.0
