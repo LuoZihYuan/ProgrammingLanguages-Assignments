@@ -1,0 +1,7 @@
+Input:
+(palindrome (list 'a 'b 'c))
+(dbl_atm 'a (list 'a (list 'b 'c 'a (list 'a 'd))))
+
+Output:
+(a b c c b a)
+(a a (b c a a (a a d)))
