@@ -1,0 +1,39 @@
+Input:
+cousin(betty, X).
+brother(Y, betty).
+sister(Z, tom).
+
+mother(amy, jane).
+father(mel, joan).
+child(fran, joan).
+sibling(richard, joan).
+sister(betty, tom).
+brother(adam, rosa).
+daughter(jane, mark).
+son(adam, richard).
+uncle(richard, tom).
+aunt(jane, rosa).
+cousin(betty, fran).
+
+Output:
+X = adam ;
+X = adam ;
+X = rosa ;
+X = rosa ;
+X = fran ;
+
+Y = tom ;
+
+Z = betty ;
+
+true.
+true.
+true.
+true.
+true.
+true.
+true.
+true.
+true.
+true.
+true.
